@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="false">
+
+	<!-- 控制台 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout class="com.ikang.platform.logback.layout.FrameworkPatternLayout">
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread:%server:%ac] %-5level %class:%line - %msg%n</pattern>
+			</layout>
+		</encoder>
+	</appender>
+
+	<!-- tomcat文件日志,每天产生文件且文件超过5M就自动压缩成一个历史文件并新生成一个文件 -->
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<append>true</append>
+		<file>${catalina.home:-.}/logs/pavo-register-service.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${catalina.home:-.}/logs/pavo_register-service-%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>5MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout class="com.ikang.platform.logback.layout.FrameworkPatternLayout">
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread:%server:%ac] %-5level %class:%line - %msg%n</pattern>
+			</layout>
+		</encoder>
+	</appender>
+	
+	<logger name="slf4j" level="DEBUG" additivity="false">
+        <appender-ref ref="console"/>
+    </logger>
+    
+	<root level="DEBUG">
+		<appender-ref ref="console" />
+		<appender-ref ref="file" />
+	</root>
+</configuration>
